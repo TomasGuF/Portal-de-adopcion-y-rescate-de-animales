@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonToast, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonList, IonItem, IonSelect, IonSelectOption, useIonRouter } from '@ionic/react';
-import { heart } from 'ionicons/icons';
+import { heart, searchOutline, optionsOutline, pawOutline, locationOutline, heartOutline, arrowForwardOutline } from 'ionicons/icons';
 import { alternarFavorito } from '../../services/animalesService';
 import type { Animal } from '../../services/animalesService';
 import { listarAnimales } from '../../services/ep2Service';
@@ -69,20 +69,20 @@ const Explorar: React.FC = () => {
               <div className="top-section">
                 <div className="header-info">
                   <div>
-                    <h1 className="page-title">Explorar animales</h1>
+                    <h1 className="page-title ui-section-title"><IonIcon icon={pawOutline} /> Explorar animales</h1>
                     <p className="page-subtitle">Ficha completa y una siguiente opción, sin gestos de rechazo.</p>
                   </div>
                   <div className="location-badge">
-                    {animalesFiltrados.length} animales • 25 km
+                    <IonIcon icon={pawOutline} /> {animalesFiltrados.length} animales
                   </div>
                 </div>
 
                 <div className="search-filter-container">
                   <div className="search-bar">
-                    <IonInput placeholder="Buscar por nombre, especie o refugio" value={busqueda} onIonInput={(e) => { setBusqueda(e.detail.value ?? ''); setCurrentIndex(0); }} clearInput></IonInput>
+                    <IonIcon icon={searchOutline} className="ui-leading-icon" aria-hidden="true" /><IonInput placeholder="Buscar por nombre, especie o refugio" value={busqueda} onIonInput={(e) => { setBusqueda(e.detail.value ?? ''); setCurrentIndex(0); }} clearInput></IonInput>
                   </div>
                   <IonButton fill="outline" color="dark" className="btn-filter" onClick={() => setFiltrosAbiertos(true)}>
-                    Filtros
+                    <IonIcon icon={optionsOutline} slot="start" /> Filtros
                   </IonButton>
                 </div>
               </div>
@@ -120,22 +120,22 @@ const Explorar: React.FC = () => {
                       {currentAnimal.description}
                     </p>
 
-                    <h4 className="section-subtitle">Refugio y ubicación</h4>
+                    <h4 className="section-subtitle"><IonIcon icon={locationOutline} className="ui-leading-icon" /> Refugio y ubicación</h4>
                     <p className="text-muted">{currentAnimal.shelter} • {currentAnimal.location} • {currentAnimal.distance}</p>
                     
                     <p className="text-muted">{currentAnimal.health}</p>
 
                     <IonButton expand="block" color="success" className="btn-postular" routerLink={`/animales/${currentAnimal.id}/postular`}>
-                      Postular para adoptar
+                      <IonIcon icon={pawOutline} slot="start" /> Postular para adoptar
                     </IonButton>
 
                     <div className="action-buttons">
                       <IonButton fill="outline" color="dark" className="btn-secondary" onClick={handleFavorito}>
-                        <IonIcon icon={heart} color="danger" slot="start" />
+                        <IonIcon icon={heartOutline} slot="start" />
                         Añadir a favoritos
                       </IonButton>
                       <IonButton fill="outline" color="dark" className="btn-secondary" routerLink={`/animales/${currentAnimal.id}/apadrinar`}>
-                        Apadrinar
+                        <IonIcon icon={heart} slot="start" /> Apadrinar
                       </IonButton>
                     </div>
                   </div>
@@ -155,7 +155,7 @@ const Explorar: React.FC = () => {
                     <p className="text-muted-small">{nextAnimal.shelter} • {nextAnimal.location} • {nextAnimal.distance}</p>
                     
                     <IonButton expand="block" fill="outline" color="dark" className="btn-ver-ficha" onClick={(e) => { e.stopPropagation(); router.push(`/animales/${nextAnimal.id}`); }}>
-                      Ver ficha de {nextAnimal.name} →
+                      Ver ficha de {nextAnimal.name} <IonIcon icon={arrowForwardOutline} slot="end" />
                     </IonButton>
                   </div>
                 </div>
