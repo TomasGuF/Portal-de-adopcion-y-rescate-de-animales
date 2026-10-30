@@ -1,4 +1,5 @@
 import React from 'react';
+import PersistentUserNav from './components/PersistentUserNav';
 import './theme/green-deck.css';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -46,6 +47,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp className="green-deck">
     <IonReactRouter>
+      <PersistentUserNav />
       <IonRouterOutlet>
         
         {/* Rutas Públicas */}
