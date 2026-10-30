@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonIcon, IonFooter, useIonRouter } from '@ionic/react';
-import { gridOutline, documentTextOutline, pawOutline, calendarOutline, personOutline } from 'ionicons/icons';
+import { gridOutline, documentTextOutline, pawOutline, calendarOutline, personOutline, heartOutline } from 'ionicons/icons';
 import { cerrarSesion } from '../services/authService';
 import './MenuAdmin.css';
 
@@ -28,7 +28,7 @@ export const MenuLateralAdmin: React.FC<MenuAdminProps> = ({ activo }) => {
     <>
       <div className="admin-sidebar-top">
         <div className="admin-logo">
-          <span className="admin-dot"></span> PatitasGo
+          <IonIcon icon={heartOutline} style={{color:"var(--gd-primary)",fontSize:24}} /> PatitasGo
         </div>
         <span className="admin-logo-subtitle">PANEL DEL REFUGIO</span>
 
