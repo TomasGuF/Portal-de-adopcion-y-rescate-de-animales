@@ -137,6 +137,22 @@ app.get('/api/applications',authenticate,asyncHandler(async(req,res)=>{
   const {rows}=await query(`${APP_SELECT} ${isAdmin?'':'WHERE a.user_id=$1'} ORDER BY a.created_at DESC LIMIT 200`,isAdmin?[]:[req.user.id]);
   send(res,200,rows.map(appData));
 }));
+// Eventos auténticos vinculados únicamente a postulaciones del usuario autenticado.
+// La tabla application_events ya forma parte del esquema; no requiere migraciones.
+app.get('/api/notifications',authenticate,role('user'),asyncHandler(async(req,res)=>{
+  const {rows}=await query(`SELECT ev.id,ev.application_id,ev.to_status,ev.reason,ev.created_at,
+      an.name AS animal,an.shelter AS shelter
+    FROM application_events ev
+    JOIN applications ap ON ap.id=ev.application_id
+    JOIN animals an ON an.id=ap.animal_id
+    WHERE ap.user_id=$1
+    ORDER BY ev.created_at DESC,ev.id DESC LIMIT 100`,[req.user.id]);
+  send(res,200,rows.map(row=>({
+    id:Number(row.id),applicationId:Number(row.application_id),estado:row.to_status,
+    animal:row.animal,refugio:row.shelter,fecha:row.created_at,
+    motivo:row.reason || ''
+  })));
+}));
 app.get('/api/applications/:id',authenticate,asyncHandler(async(req,res)=>{
   const id=idValue(req.params.id);if(!id)return fail(res,400,'VALIDATION_ERROR','ID inválido');
   const {rows}=await query(`${APP_SELECT} WHERE a.id=$1 ${req.user.role==='admin'?'':'AND a.user_id=$2'}`,[id,...(req.user.role==='admin'?[]:[req.user.id])]);
