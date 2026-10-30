@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IonButton, IonIcon, IonFooter, IonAlert, useIonRouter } from '@ionic/react';
-import { searchOutline, documentTextOutline, notificationsOutline, personOutline } from 'ionicons/icons';
+import { searchOutline, documentTextOutline, notificationsOutline, personOutline, pawOutline } from 'ionicons/icons';
 import './MenuUsuario.css';
 
 const ITEMS = [
@@ -22,7 +22,7 @@ export const MenuLateralUsuario: React.FC<MenuUsuarioProps> = ({ activo }) => {
     <>
       <div className="sidebar-header">
         <button type="button" className="logo usuario-logo-boton" onClick={() => router.push('/catalogo')} aria-label="PatitasGo: ir a explorar animales">
-          <span className="dot"></span> PatitasGo
+          <IonIcon icon={pawOutline} style={{color:"var(--gd-primary)",fontSize:24}} /> PatitasGo
         </button>
         <span className="logo-subtitle">ADOPCIÓN Y RESCATE</span>
       </div>
