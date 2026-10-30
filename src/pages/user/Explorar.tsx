@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon,
+  IonPage, IonContent, IonInput, IonButton, IonIcon,
   IonToast, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons,
   IonList, IonItem, IonSelect, IonSelectOption, IonSpinner, useIonRouter
 } from '@ionic/react';
@@ -14,7 +14,6 @@ import { alternarFavorito, esFavorito } from '../../services/animalesService';
 import type { Animal } from '../../services/animalesService';
 import { listarAnimales } from '../../services/ep2Service';
 import { estaAutenticado } from '../../services/authService';
-import { MenuLateralUsuario, BarraInferiorUsuario } from '../../components/MenuUsuario';
 import './Explorar.css';
 
 const Explorar: React.FC = () => {
@@ -24,7 +23,7 @@ const Explorar: React.FC = () => {
   const [error, setError] = useState('');
   const [refrescar, setRefrescar] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [favoritosVersion, setFavoritosVersion] = useState(0);
+  const [favoritoActual, setFavoritoActual] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const [busqueda, setBusqueda] = useState('');
   const [especie, setEspecie] = useState('TODAS');
@@ -53,9 +52,10 @@ const Explorar: React.FC = () => {
   const siguienteAnimal = animalesFiltrados.length > 1
     ? animalesFiltrados[(indice + 1) % animalesFiltrados.length]
     : null;
-  // Se recalcula en cada render, incluyendo los cambios de favoritos.
-  void favoritosVersion;
-  const favoritoActual = animalActual ? esFavorito(animalActual.id) : false;
+  // Mantener el estado del corazón alineado con el animal que se está mostrando.
+  useEffect(() => {
+    setFavoritoActual(animalActual ? esFavorito(animalActual.id) : false);
+  }, [animalActual?.id]);
 
   const siguiente = () => {
     if (animalesFiltrados.length > 1) setCurrentIndex(i => (i + 1) % animalesFiltrados.length);
@@ -70,19 +70,14 @@ const Explorar: React.FC = () => {
     if (!animalActual) return;
     if (!estaAutenticado()) { router.push('/login'); return; }
     const agregado = alternarFavorito(animalActual.id);
-    setFavoritosVersion(v => v + 1);
+    setFavoritoActual(agregado);
     setMensaje(agregado ? `${animalActual.name} se agregó a tus favoritos` : `${animalActual.name} se quitó de tus favoritos`);
   };
 
   return (
     <IonPage>
       <IonContent fullscreen className="explore-content">
-        <IonGrid className="explore-grid">
-          <IonRow className="explore-row">
-            <IonCol size="12" sizeMd="3" sizeLg="2.5" className="sidebar">
-              <MenuLateralUsuario activo="/catalogo" />
-            </IonCol>
-            <IonCol size="12" sizeMd="9" sizeLg="9.5" className="main-content">
+        <main className="main-content explore-main">
               <header className="top-section">
                 <div className="header-info">
                   <div>
@@ -215,9 +210,7 @@ const Explorar: React.FC = () => {
                   )}
                 </section>
               )}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
+        </main>
 
         <IonModal isOpen={filtrosAbiertos} onDidDismiss={() => setFiltrosAbiertos(false)} initialBreakpoint={0.6} breakpoints={[0, 0.6, 1]}>
           <IonHeader><IonToolbar>
@@ -247,7 +240,6 @@ const Explorar: React.FC = () => {
         </IonModal>
         <IonToast isOpen={mensaje !== ''} message={mensaje} duration={2400} onDidDismiss={() => setMensaje('')} />
       </IonContent>
-      <BarraInferiorUsuario activo="/catalogo" />
     </IonPage>
   );
 };
