@@ -352,3 +352,18 @@
    scroll-behavior:auto !important;
  }
 }
+/* Borde secundario acordado para toda la aplicación: #E5E7EB */
+.green-deck ion-button[fill="outline"] {
+  --border-color:#E5E7EB !important;
+  --border-width:1px;
+  --background:#fff;
+  --background-hover:#F9FAFB;
+  --color:#17211b;
+  --border-radius:999px;
+  box-shadow:none;
+}
+.green-deck ion-button[fill="outline"]::part(native) {border-color:#E5E7EB !important;border-width:1px !important;}
+.green-deck .cards-layout ion-button[fill="outline"],
+.green-deck .search-filter-container ion-button[fill="outline"],
+.green-deck .detalle-acciones ion-button[fill="outline"] {--border-color:#E5E7EB !important;--border-width:1px;}
+.green-deck .filtros-dialog ion-button[fill="outline"]{--border-color:#E5E7EB !important;}
