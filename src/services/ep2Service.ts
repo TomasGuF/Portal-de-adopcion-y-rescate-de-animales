@@ -14,3 +14,8 @@ export const listarPostulaciones = () => apiRequest<Postulacion[]>('/api/applica
 export const detallePostulacion = (id:number) => apiRequest<Postulacion>(`/api/applications/${id}`);
 export const cambiarEstadoPostulacion = (id:number,status:string,reason='') =>
   apiRequest(`/api/applications/${id}/status`,{method:'PATCH',body:JSON.stringify({status,reason})});
+
+export interface NotificacionAPI {
+ id:number; applicationId:number; estado:string; animal:string; refugio:string; fecha:string; motivo:string;
+}
+export const listarNotificaciones = () => apiRequest<NotificacionAPI[]>('/api/notifications');
