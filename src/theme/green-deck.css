@@ -1,0 +1,281 @@
+/*
+ * PATITASGO / GREEN DECK
+ * Adaptación de DESIGN.md. Dark-first, DM Sans, jerarquía por superficies.
+ * Tokens centrales: modificar estos valores antes que las pantallas.
+ */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap');
+
+.green-deck {
+  --gd-bg: #121212;
+  --gd-sidebar: #080808;
+  --gd-surface: #181818;
+  --gd-raised: #282828;
+  --gd-hover: #333333;
+  --gd-primary: #1db954;
+  --gd-primary-hover: #1ed760;
+  --gd-text: #ffffff;
+  --gd-muted: #a7a7a7;
+  --gd-subtle: #b3b3b3;
+  --gd-outline: #727272;
+  --gd-line: #282828;
+  --gd-error: #e22134;
+  --gd-warning: #f59b23;
+  --ion-font-family: 'DM Sans', system-ui, sans-serif;
+  --ion-background-color: var(--gd-bg);
+  --ion-text-color: var(--gd-text);
+  --ion-border-color: var(--gd-line);
+  --ion-item-background: var(--gd-surface);
+  --ion-card-background: var(--gd-surface);
+  --ion-toolbar-background: var(--gd-surface);
+  --ion-tab-bar-background: var(--gd-surface);
+  --ion-color-primary: #1db954;
+  --ion-color-primary-rgb: 29,185,84;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-shade: #1aa349;
+  --ion-color-primary-tint: #34c167;
+  --ion-color-success: #1db954;
+  --ion-color-success-rgb: 29,185,84;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-shade: #1aa349;
+  --ion-color-success-tint: #34c167;
+  --ion-color-dark: #fff;
+  --ion-color-dark-rgb: 255,255,255;
+  --ion-color-dark-contrast: #121212;
+  --ion-color-medium: #a7a7a7;
+  --ion-color-medium-rgb: 167,167,167;
+  --ion-color-medium-contrast: #121212;
+  background: var(--gd-bg);
+  color: var(--gd-text);
+  font: 400 14px/1.5 'DM Sans', system-ui, sans-serif;
+}
+.green-deck *, .green-deck *::before, .green-deck *::after { box-sizing: border-box; }
+.green-deck :is(h1,h2,h3,h4,h5,p,span,label,small,strong) { font-family: var(--ion-font-family); }
+.green-deck :is(h1,h2,h3,h4) { color: var(--gd-text); letter-spacing: -.02em; }
+.green-deck h1 { font-weight: 700; }
+.green-deck :is(p,small) { line-height: 1.5; }
+.green-deck :is(button,a,ion-button,ion-item[button],.nav-item,.next-animal-card,.nav-item-mobile) { -webkit-tap-highlight-color: transparent; }
+.green-deck :is(button,a,input,textarea,select,.nav-item,ion-button,ion-input,ion-select):focus-visible {
+  outline: 2px solid var(--gd-primary-hover); outline-offset: 3px;
+}
+.green-deck ion-content { --background: var(--gd-bg); color: var(--gd-text); }
+.green-deck ion-label, .green-deck ion-item, .green-deck ion-card, .green-deck ion-list {
+  color: var(--gd-text);
+}
+.green-deck ion-item { --background: var(--gd-surface); --color: var(--gd-text); --border-color: var(--gd-line); }
+.green-deck ion-list { background: transparent; }
+.green-deck ion-item ion-label p, .green-deck ion-card-subtitle { color: var(--gd-muted); }
+.green-deck ion-card {
+  --background: var(--gd-surface); color: var(--gd-text);
+  border-radius: 8px; box-shadow: none;
+  transition: background .2s ease, transform .2s ease;
+}
+.green-deck ion-card[button]:hover { --background: var(--gd-raised); transform: translateY(-2px); }
+.green-deck ion-badge { border-radius: 9999px; padding: 6px 12px; font-weight: 700; }
+.green-deck ion-toolbar { --background: var(--gd-surface); --color: var(--gd-text); }
+.green-deck ion-button {
+  --border-radius: 9999px;
+  --box-shadow: none;
+  font-weight: 700;
+  letter-spacing: .025em;
+  transition: transform .18s ease;
+}
+.green-deck ion-button:not([disabled]):hover { transform: scale(1.02); }
+.green-deck ion-button[color="success"]:not([fill="outline"]):not([fill="clear"]),
+.green-deck ion-button[color="primary"]:not([fill="outline"]):not([fill="clear"]) {
+  --background: var(--gd-primary); --background-hover: var(--gd-primary-hover);
+  --color: #000; --color-hover: #000;
+}
+.green-deck ion-button[fill="outline"] {
+  --border-color: var(--gd-outline); --color: var(--gd-text);
+}
+.green-deck ion-input, .green-deck ion-textarea, .green-deck ion-select {
+  --color: var(--gd-text); --placeholder-color: var(--gd-muted);
+  --highlight-color-focused: var(--gd-primary);
+}
+.green-deck input, .green-deck textarea, .green-deck select {
+  color: var(--gd-text); background-color: var(--gd-raised);
+  border: 1px solid transparent; font: inherit;
+}
+.green-deck input::placeholder, .green-deck textarea::placeholder { color: var(--gd-muted); }
+.green-deck input:focus, .green-deck textarea:focus, .green-deck select:focus { border-color: #fff; }
+.green-deck .ui-leading-icon { color: var(--gd-muted); font-size: 18px; flex: none; }
+.green-deck .ui-section-title { display:flex; align-items:center; gap:12px; }
+.green-deck .ui-section-title > ion-icon { color: var(--gd-primary); flex:none; font-size:24px; }
+.green-deck .ui-meta { display:inline-flex; align-items:center; gap:6px; color:var(--gd-muted); }
+.green-deck .ui-meta ion-icon { font-size:15px; }
+
+/* Navegación: panel fijo visual de 240 px en escritorio, móvil con cuatro tabs. */
+.green-deck .sidebar, .green-deck .usuario-lateral.sidebar, .green-deck .admin-sidebar {
+  background: var(--gd-sidebar) !important; border-color: var(--gd-line) !important; color: var(--gd-text);
+}
+.green-deck .usuario-estructura { grid-template-columns: 240px minmax(0, 1fr); }
+.green-deck :is(.logo,.admin-logo,.usuario-logo-boton,.pm-logo-text) { color: var(--gd-text) !important; font-weight: 800; letter-spacing: -.025em; }
+.green-deck :is(.logo .dot,.admin-logo .admin-dot,.register-logo .dot-light) { background-color: var(--gd-primary) !important; }
+.green-deck .logo-subtitle, .green-deck .admin-logo-subtitle { color: var(--gd-muted); }
+.green-deck :is(.nav-item,.admin-nav-item) {
+  color: var(--gd-subtle); font-size:14px; font-weight:700; border-radius:8px;
+  transition: background .2s ease,color .2s ease;
+}
+.green-deck :is(.nav-item,.admin-nav-item):hover { background: var(--gd-raised); color: #fff; }
+.green-deck :is(.nav-item.active,.admin-nav-item.active) {
+  background: var(--gd-raised) !important; color: var(--gd-text) !important;
+  box-shadow: inset 3px 0 0 var(--gd-primary);
+}
+.green-deck :is(.nav-item.active,.admin-nav-item.active) ion-icon { color: var(--gd-primary); }
+.green-deck :is(.help-box,.admin-sidebar-bottom) {
+  background: var(--gd-surface); border:0; border-radius:8px; padding:16px;
+}
+.green-deck :is(.help-box h4,.refugio-info h4) { color:var(--gd-text); }
+.green-deck :is(.help-box p,.refugio-info p) { color:var(--gd-muted); }
+.green-deck .mobile-bottom-nav, .green-deck .admin-mobile-nav,
+.green-deck .barra-inferior-footer .mobile-bottom-nav {
+  background: var(--gd-surface) !important; border-top:1px solid var(--gd-line) !important;
+  box-shadow: 0 -8px 24px rgba(0,0,0,.35);
+}
+.green-deck :is(.nav-item-mobile,.admin-nav-item-mobile) { color:var(--gd-muted); }
+.green-deck :is(.nav-item-mobile.active,.admin-nav-item-mobile.active) { color:var(--gd-primary); }
+.green-deck .usuario-principal,.green-deck .admin-main,.green-deck .main-content { background:var(--gd-bg) !important; color:var(--gd-text); }
+.green-deck .usuario-interior > h1,.green-deck .page-title,.green-deck .admin-page-title {
+  color:var(--gd-text) !important; font-size:32px; line-height:40px; font-weight:700; letter-spacing:-.02em;
+}
+.green-deck .page-subtitle,.green-deck .admin-page-subtitle,
+.green-deck .usuario-interior > ion-text p,.green-deck .text-muted,.green-deck .text-muted-small {
+  color:var(--gd-muted) !important;
+}
+.green-deck .usuario-tarjeta { background:var(--gd-surface) !important; border:0; border-radius:8px; padding:24px; }
+.green-deck .usuario-vacio { background:var(--gd-surface); }
+.green-deck .usuario-interior ion-list[inset] { background:var(--gd-surface); border-radius:8px; }
+.green-deck .usuario-interior ion-list[inset] ion-item { --background:var(--gd-surface); }
+.green-deck .usuario-interior ion-list[inset] ion-item:hover { --background:var(--gd-raised); }
+.green-deck .usuario-error,.green-deck .register-error { color:#ff6573; }
+
+/* Catálogo: superficie oscura y fotografías protagonistas, controles semánticos. */
+.green-deck .explore-content,.green-deck .usuario-cuerpo,.green-deck .admin-content { --background:var(--gd-bg); }
+.green-deck .main-animal-card,.green-deck .next-animal-card {
+  background:var(--gd-surface) !important; border:0 !important; border-radius:8px;
+  box-shadow:none; color:var(--gd-text);
+}
+.green-deck .next-animal-card:hover { background:var(--gd-raised) !important; }
+.green-deck :is(.animal-name,.animal-name-small) { color:var(--gd-text); letter-spacing:-.025em; }
+.green-deck :is(.animal-stats,.animal-stats-small,.animal-desc) { color:var(--gd-muted); }
+.green-deck .section-subtitle { color:var(--gd-text); }
+.green-deck .next-label { color:var(--gd-muted); letter-spacing:.1em; font-size:11px; }
+.green-deck .main-animal-img { min-height:420px; }
+.green-deck .next-animal-img { border-radius:8px; }
+.green-deck .tag { background:var(--gd-raised); color:#fff; border-radius:9999px; }
+.green-deck .location-badge { background:var(--gd-raised); color:var(--gd-text); border-radius:9999px; }
+.green-deck .status-badge { color:var(--gd-primary); letter-spacing:.1em; font-size:11px; }
+.green-deck .search-bar {
+  background:var(--gd-raised) !important; border:0 !important; border-radius:9999px;
+  color:var(--gd-text); min-height:48px; display:flex; align-items:center; gap:10px;
+}
+.green-deck .search-bar input { background:transparent; }
+.green-deck .search-filter-container .search-bar ion-input { --background:transparent; }
+.green-deck .btn-filter,.green-deck .btn-secondary,.green-deck .btn-ver-ficha {
+  --border-color:var(--gd-outline); --color:var(--gd-text); --border-radius:9999px;
+}
+.green-deck .btn-postular { --border-radius:9999px; }
+.green-deck .filter-btn,.green-deck .mobile-tab,.green-deck .agenda-tab {
+  background:var(--gd-raised); color:var(--gd-text); border:0; border-radius:9999px;
+}
+.green-deck :is(.mobile-tab.active,.agenda-tab.active) { background:#fff; color:#000; }
+
+/* Formulario de postulación y paneles administrativos. */
+.green-deck :is(.form-card,.summary-box,.admin-stat-card,.desktop-table-container,.mobile-card,.summary-card,.agenda-row-item) {
+  background:var(--gd-surface) !important; color:var(--gd-text); border:0 !important;
+  border-radius:8px; box-shadow:none;
+}
+.green-deck .form-grid :is(input,textarea),.green-deck :is(.input-group input,.input-group textarea) {
+  background:var(--gd-raised); border-color:transparent; border-radius:4px; color:#fff;
+}
+.green-deck :is(.input-group label,.form-step h3,.postula-title,.agenda-animal) { color:var(--gd-text); }
+.green-deck :is(.postula-subtitle,.overline,.agenda-postulante,.summary-text) { color:var(--gd-muted); }
+.green-deck .checkbox-container { color:var(--gd-subtle); }
+.green-deck :is(.stats-cards-container .admin-stat-card,.admin-stat-card.bg-blue,.admin-stat-card.bg-green,.admin-stat-card.bg-red) {
+  background:var(--gd-surface) !important; border:0;
+}
+.green-deck .admin-stat-card h3,.green-deck .animal-nombre,.green-deck .postulante-nombre { color:var(--gd-text); }
+.green-deck .admin-stat-card p,.green-deck .animal-id,.green-deck .postulante-rut { color:var(--gd-muted); }
+.green-deck .requests-table th,.green-deck .requests-table td { border-color:var(--gd-line); }
+.green-deck .requests-table th { color:var(--gd-muted); }
+.green-deck .requests-table tr:hover td { background:var(--gd-raised); }
+.green-deck :is(.desktop-footer-note,.mobile-info-box) { background:var(--gd-surface); color:var(--gd-muted); border-radius:8px; }
+.green-deck .mobile-info-box strong { color:var(--gd-text); }
+.green-deck :is(.update-label,.estado-publicado) { background:var(--gd-raised); color:var(--gd-primary); }
+.green-deck .estado-borrador { background:var(--gd-raised); color:var(--gd-muted); }
+.green-deck .refugio-info button,.green-deck .btn-text-success { color:var(--gd-primary); }
+.green-deck .ui-action-icon { font-size:18px; vertical-align:middle; margin-right:6px; }
+
+/* Autenticación: dos paneles monocromáticos, sin fondos blancos. */
+.green-deck :is(.login-content,.register-content) { --background:var(--gd-bg); }
+.green-deck :is(.left-column,.register-left-column) { background:var(--gd-surface) !important; }
+.green-deck :is(.right-column,.register-right-column) { background:var(--gd-bg) !important; }
+.green-deck :is(.main-title,.register-main-title) { color:var(--gd-text); font-size:clamp(34px,3.2vw,48px); line-height:1.16; letter-spacing:-.03em; }
+.green-deck :is(.subtitle,.register-subtitle) { color:var(--gd-muted); }
+.green-deck :is(.login-form,.register-form) {
+  background:var(--gd-surface) !important; box-shadow:none; border:0 !important; border-radius:8px;
+}
+.green-deck :is(.form-title,.register-form-title) { color:var(--gd-text); font-size:32px; line-height:40px; }
+.green-deck :is(.form-subtitle,.register-form-subtitle) { color:var(--gd-muted); }
+.green-deck :is(.input-item,.register-input-item) {
+  --background:var(--gd-raised); --color:var(--gd-text);
+  --border-radius:4px; background:var(--gd-raised);
+  border:1px solid transparent; border-radius:4px;
+}
+.green-deck :is(.input-item,.register-input-item):focus-within { border-color:#fff; }
+.green-deck :is(.input-item,.register-input-item) ion-input { --color:var(--gd-text); }
+.green-deck :is(.privacy-box,.protected-data-box,.stat-box) {
+  background:var(--gd-raised); color:var(--gd-muted); border:0; border-radius:8px; box-shadow:none;
+}
+.green-deck :is(.privacy-box strong,.protected-data-box strong,.stat-box h3) { color:var(--gd-text); }
+.green-deck :is(.privacy-box p,.protected-data-box p,.stat-box p) { color:var(--gd-muted); }
+.green-deck .badge-adopcion { background:var(--gd-raised); color:var(--gd-primary); }
+.green-deck .checkbox-item { --background:transparent; --color:var(--gd-text); color:var(--gd-text); }
+.green-deck .password-hints .hint-ok { color:var(--gd-primary); }
+.green-deck .password-hints .hint-pendiente { color:#ff6573; }
+.green-deck :is(.dog-image,.register-cat-image) { border-radius:8px; }
+
+/* Home: fotografía enmarcada por un degradado oscuro, CTA verde. */
+.green-deck .petmatch-style-page { font-family:var(--ion-font-family); }
+.green-deck .pm-navbar { background:linear-gradient(180deg,rgba(0,0,0,.88),transparent); }
+.green-deck .pm-overlay { background:linear-gradient(180deg,rgba(0,0,0,.62),rgba(0,0,0,.38) 50%,rgba(0,0,0,.75)); }
+.green-deck .pm-title { font-size:clamp(38px,5vw,64px);line-height:1.12;letter-spacing:-.03em; }
+.green-deck .pm-subtitle { color:var(--gd-text); }
+.green-deck :is(.pm-btn-register,.pm-btn-cta) {
+  background:var(--gd-primary); color:#000; border:0; border-radius:9999px;
+  font-weight:700; letter-spacing:.025em; box-shadow:none;
+}
+.green-deck :is(.pm-btn-register,.pm-btn-cta):hover { background:var(--gd-primary-hover); transform:scale(1.04); }
+.green-deck .pm-logo { border:0; background:transparent; padding:0; }
+.green-deck .pm-logo-icon { color:var(--gd-primary); font-size:25px; }
+
+/* Ionic popovers, dialogs and toast use the same tone. */
+.green-deck ion-alert, .green-deck ion-modal, .green-deck ion-popover {
+  --background:var(--gd-raised); --color:var(--gd-text);
+}
+.green-deck ion-modal ion-content { --background:var(--gd-bg); }
+.green-deck ion-checkbox { --checkbox-background-checked:var(--gd-primary); --border-color-checked:var(--gd-primary); }
+.green-deck .layout-toolbar { --background:var(--gd-surface); }
+.green-deck .layout-content { --background:var(--gd-bg); }
+.green-deck .layout-logo { color:var(--gd-text); }
+.green-deck .layout-contenedor { color:var(--gd-text); }
+
+@media(max-width:992px) {
+  .green-deck .usuario-estructura { display:block; }
+  .green-deck .sidebar,.green-deck .usuario-lateral.sidebar,.green-deck .admin-sidebar { display:none; }
+  .green-deck .main-animal-img { min-height:0; height:300px; }
+  .green-deck .main-content,.green-deck .admin-main { padding:24px 16px; }
+  .green-deck .usuario-principal { padding:24px 16px; }
+}
+@media(max-width:650px) {
+  .green-deck .form-wrapper,.green-deck .register-form-wrapper { padding:12px; }
+  .green-deck .login-form,.green-deck .register-form { padding:24px 18px; }
+  .green-deck .header-info { gap:14px; flex-wrap:wrap; }
+  .green-deck .cards-layout { gap:16px; }
+  .green-deck .main-animal-details { padding:20px; }
+  .green-deck .action-buttons { flex-wrap:wrap; }
+  .green-deck .pm-navbar { padding:0 16px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .green-deck *, .green-deck *::before,.green-deck *::after { transition-duration:.01ms !important; animation-duration:.01ms !important; scroll-behavior:auto !important; }
+}
