@@ -212,12 +212,13 @@ const Explorar: React.FC = () => {
               )}
         </main>
 
-        <IonModal isOpen={filtrosAbiertos} onDidDismiss={() => setFiltrosAbiertos(false)} initialBreakpoint={0.6} breakpoints={[0, 0.6, 1]}>
+        <IonModal className="filtros-dialog" isOpen={filtrosAbiertos} onDidDismiss={() => setFiltrosAbiertos(false)} aria-label="Filtros de búsqueda">
           <IonHeader><IonToolbar>
-            <IonTitle>Filtros</IonTitle>
-            <IonButtons slot="end"><IonButton onClick={() => setFiltrosAbiertos(false)}>Listo</IonButton></IonButtons>
+            <IonTitle>Filtrar animales</IonTitle>
+            <IonButtons slot="end"><IonButton fill="clear" color="dark" onClick={() => setFiltrosAbiertos(false)} aria-label="Cerrar filtros">Cerrar</IonButton></IonButtons>
           </IonToolbar></IonHeader>
-          <IonContent className="ion-padding">
+          <IonContent className="ion-padding filtros-contenido">
+            <p className="filtros-descripcion">Encuentra un compañero según sus características.</p>
             <IonList>
               <IonItem>
                 <IonSelect label="Especie" value={especie} onIonChange={e => { setEspecie(e.detail.value); setCurrentIndex(0); }}>
@@ -235,7 +236,7 @@ const Explorar: React.FC = () => {
                 </IonSelect>
               </IonItem>
             </IonList>
-            <IonButton expand="block" fill="outline" color="dark" onClick={limpiarFiltros}>Limpiar filtros</IonButton>
+            <div className="filtros-acciones"><IonButton fill="outline" color="dark" onClick={limpiarFiltros}>Limpiar filtros</IonButton><IonButton color="success" onClick={() => setFiltrosAbiertos(false)}>Ver {animalesFiltrados.length} animales</IonButton></div>
           </IonContent>
         </IonModal>
         <IonToast isOpen={mensaje !== ''} message={mensaje} duration={2400} onDidDismiss={() => setMensaje('')} />
