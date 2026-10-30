@@ -463,3 +463,26 @@
  .animal-card-enter {animation:none;}
  .next-animal-card {transition:none;}
 }
+
+/* EP2: dimensiones correctas dentro del shell persistente. */
+.green-deck .explore-main { width:calc(100% - 240px);max-width:none; }
+.green-deck .cards-layout {display:grid;grid-template-columns:minmax(0,1.75fr) minmax(280px,1fr);gap:20px;align-items:start;}
+.green-deck .main-animal-card {display:grid;grid-template-columns:minmax(220px,43%) minmax(0,1fr);min-width:0;width:100%;align-items:stretch;overflow:hidden;}
+.green-deck .main-animal-img {width:100%;height:100%;min-height:440px;aspect-ratio:auto;object-fit:cover;object-position:center;}
+.green-deck .main-animal-details {width:100%;min-width:0;padding:26px;display:flex;flex-direction:column;}
+.green-deck .next-animal-card {min-width:0;width:100%;}
+.green-deck .animal-actions {margin-top:auto;padding-top:18px;}
+.green-deck .action-buttons {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.green-deck .action-buttons .btn-secondary {width:100%;min-width:0;}
+/* Diálogo centrado, no panel inferior tipo móvil. */
+.green-deck ion-modal.filtros-dialog {--width:min(92vw,510px);--height:340px;--border-radius:18px;--box-shadow:0 24px 70px rgba(15,23,42,.19);align-items:center;justify-content:center;}
+.green-deck .filtros-dialog ion-toolbar {--background:#fff;--color:#17211b;--padding-start:16px;--padding-end:10px;}
+.green-deck .filtros-dialog .filtros-contenido {--background:#fff;--padding-start:20px;--padding-end:20px;}
+.green-deck .filtros-dialog ion-list {background:#fff;border:1px solid #E5E7EB;border-radius:12px;overflow:hidden;}
+.green-deck .filtros-dialog ion-item {--background:#fff;--border-color:#E5E7EB;--color:#17211b;}
+.green-deck .filtros-descripcion {color:#64716a;font-size:13px;margin:0 0 16px;}
+.green-deck .filtros-acciones {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+.green-deck .filtros-acciones ion-button {min-height:42px;margin:0;}
+@media(max-width:1280px){.green-deck .cards-layout{grid-template-columns:minmax(0,1fr);}.green-deck .main-animal-card{grid-template-columns:minmax(210px,42%) minmax(0,1fr);}}
+@media(max-width:992px){.green-deck .explore-main{width:100%;}.green-deck .main-animal-card{grid-template-columns:1fr;}.green-deck .main-animal-img{height:290px;min-height:290px;}.green-deck .filtros-dialog{--width:min(94vw,510px);}}
+@media(max-width:520px){.green-deck .filtros-acciones{grid-template-columns:1fr;}.green-deck ion-modal.filtros-dialog{--height:390px;}}
