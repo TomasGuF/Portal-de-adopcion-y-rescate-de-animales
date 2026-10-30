@@ -25,3 +25,5 @@
 .detalle-acciones .action-buttons { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:12px; }
 .detalle-acciones .action-buttons ion-button { width:100%; min-width:0; margin:0; }
 @media(max-width:650px){.detalle-acciones .action-buttons{grid-template-columns:1fr;}}
+
+.green-deck .detalle-acciones ion-button[fill="outline"]{--border-color:#E5E7EB !important;--border-width:1px;}
