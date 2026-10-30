@@ -13,7 +13,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); 
 
     if (!email || !password) {
@@ -30,7 +30,9 @@ const Login: React.FC = () => {
 
     // Definimos qué correo activa el rol de administrador
     // Guardamos la sesión y el rol detectado automáticamente en el navegador
-    const roleType = iniciarSesion(email);
+    let roleType;
+    try { roleType = await iniciarSesion(email, password); }
+    catch (err) { setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión'); return; }
 
     // Redirección inteligente según el correo ingresado
     router.push(destino && roleType === 'user' ? destino : rutaInicioPorRol(roleType), 'root', 'replace');
