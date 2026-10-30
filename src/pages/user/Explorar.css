@@ -387,3 +387,79 @@
   .explore-grid, .explore-row { height: auto; }
   .main-content { padding-bottom: 20px; }
 }
+
+
+/* EP2 - refinamiento de fichas, interacciones y jerarquía visual */
+.animal-card-enter { animation: animal-card-enter .3s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes animal-card-enter { from { opacity:.35;transform:translateY(10px); } to {opacity:1;transform:translateY(0);} }
+.animal-meta-row {list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px;padding:0;}
+.animal-meta-pill {display:inline-flex;align-items:center;gap:6px;background:#f4f7f5;border-radius:999px;padding:7px 11px;color:#34453b;font-size:12px;font-weight:600;}
+.animal-meta-pill ion-icon {color:#189248;font-size:16px;}
+.animal-status-dot {width:7px;height:7px;border-radius:50%;display:inline-block;background:#1db954;margin-right:7px;}
+.animal-section {border-top:1px solid #edf0ee;margin-top:15px;padding-top:14px;}
+.animal-section-title {display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#17211b;margin:0 0 7px;}
+.animal-section-title ion-icon {color:#169e46;font-size:18px;}
+.animal-section-text {font-size:13px;line-height:1.6;color:#56665c;margin:0;}
+.animal-section-text strong {color:#253e30;font-weight:700;}
+.animal-section-note {font-size:12px;color:#7c8980;margin:4px 0 0;}
+.animal-actions {margin-top:20px;}
+.main-animal-details {display:flex;flex-direction:column;}
+.main-animal-card {align-items:stretch;}
+.main-animal-img {display:block;aspect-ratio:4/5;object-fit:cover;min-height:420px;}
+.next-animal-card {transition:transform .22s ease,box-shadow .22s ease,background .22s ease;}
+.next-animal-card:hover {transform:translateY(-3px);box-shadow:0 12px 30px rgba(20,50,30,.09) !important;background:#fbfdfb !important;}
+.next-animal-card:focus-visible {outline:3px solid #1db954;outline-offset:3px;}
+.next-header {display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;}
+.next-header .next-label {margin:0;}
+.next-hint {font-size:11px;color:#718076;display:inline-flex;align-items:center;gap:4px;}
+.next-hint ion-icon {font-size:13px;}
+.next-animal-img {display:block;}
+.next-animal-details {display:flex;flex-direction:column;gap:6px;}
+.next-animal-details .text-muted-small {display:flex;align-items:center;gap:5px;}
+.next-animal-details .text-muted-small ion-icon {flex:none;color:#179846;}
+.btn-ver-ficha {width:100%;margin-top:12px;--padding-start:14px;--padding-end:14px;--border-width:1px;}
+.btn-ver-ficha span {white-space:normal;word-break:normal;overflow-wrap:break-word;line-height:1.25;}
+.explore-feedback {min-height:235px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:10px;border:1px solid #e7ebe8;border-radius:16px;background:#fff;padding:32px 24px;color:#64716a;}
+.explore-feedback > ion-icon {font-size:36px;color:#1db954;}
+.explore-feedback h2 {margin:0;color:#17211b;font-size:20px;}
+.explore-feedback p {margin:0 0 8px;}
+.green-deck .cards-layout ion-button[fill="outline"],
+.green-deck .search-filter-container ion-button[fill="outline"] {
+ --border-color:#d9e4db !important;
+ --border-width:1px;
+ --color:#34483c !important;
+ --background:#f7faf8;
+ --background-hover:#eaf5ed;
+ --border-radius:999px;
+}
+.green-deck .cards-layout ion-button[fill="outline"]:hover {
+ --border-color:#bfdcc6 !important;
+ --background:#eff8f1;
+}
+.green-deck .cards-layout .btn-postular {
+ --background:#1db954 !important;
+ --background-hover:#169e46 !important;
+ --color:#ffffff !important;
+ --color-hover:#ffffff !important;
+}
+.green-deck .cards-layout .btn-postular::part(native) {color:#ffffff !important;}
+.green-deck .cards-layout .btn-postular ion-icon {color:#ffffff !important;}
+.green-deck .btn-secondary ion-icon {color:#168942;}
+@media (max-width: 1200px) {
+ .cards-layout {flex-wrap:wrap;}
+ .main-animal-card {flex:1 1 610px;}
+ .next-animal-card {flex:1 1 290px;}
+}
+@media(max-width:992px) {
+ .main-animal-img {min-height:0;height:300px;aspect-ratio:auto;}
+}
+@media(max-width:550px){
+ .main-animal-details {padding:20px;}
+ .next-hint {display:none;}
+ .action-buttons {flex-direction:column;}
+ .action-buttons ion-button {width:100%;}
+}
+@media (prefers-reduced-motion:reduce) {
+ .animal-card-enter {animation:none;}
+ .next-animal-card {transition:none;}
+}
