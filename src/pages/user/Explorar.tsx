@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonInput, IonButton, IonIcon, IonToast, IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonList, IonItem, IonSelect, IonSelectOption, useIonRouter } from '@ionic/react';
 import { heart } from 'ionicons/icons';
-import { obtenerAnimales, alternarFavorito } from '../../services/animalesService';
+import { alternarFavorito } from '../../services/animalesService';
+import type { Animal } from '../../services/animalesService';
+import { listarAnimales } from '../../services/ep2Service';
 import { estaAutenticado } from '../../services/authService';
 import { MenuLateralUsuario, BarraInferiorUsuario } from '../../components/MenuUsuario';
 import './Explorar.css';
 
-const ANIMALS_DATA = obtenerAnimales();
+
 
 const Explorar: React.FC = () => {
+  const [ANIMALS_DATA,setAnimals]=useState<Animal[]>([]);
+  useEffect(()=>{let active=true;listarAnimales().then(data=>{if(active)setAnimals(data);}).catch(err=>{if(active)setMensaje(err.message);});return()=>{active=false;};},[]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [mensaje, setMensaje] = useState('');
   const [busqueda, setBusqueda] = useState('');
@@ -30,7 +34,7 @@ const Explorar: React.FC = () => {
   const nextAnimal = animalesFiltrados[(indice + 1) % animalesFiltrados.length];
 
   const handleNextAnimal = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % animalesFiltrados.length);
+    if(animalesFiltrados.length)setCurrentIndex((prevIndex) => (prevIndex + 1) % animalesFiltrados.length);
   };
 
   const limpiarFiltros = () => {
