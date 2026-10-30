@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IonPage, IonContent, IonInput, IonButton, IonText, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonCheckbox, IonInputPasswordToggle } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
-import { iniciarSesion, rutaInicioPorRol } from '../../services/authService';
+import { registrarUsuario, rutaInicioPorRol } from '../../services/authService';
 import './CrearCuenta.css'; 
 
 const REQUISITOS_PASSWORD = [
@@ -26,7 +26,7 @@ const CrearCuenta: React.FC = () => {
   const passwordValida = REQUISITOS_PASSWORD.every((r) => r.cumple(password));
   const coinciden = confirmPassword !== '' && password === confirmPassword;
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!nombre || !email || !password || !confirmPassword || !aceptaTerminos) {
@@ -54,7 +54,9 @@ const CrearCuenta: React.FC = () => {
     // Definimos el correo exclusivo de administración (puedes cambiarlo o adaptarlo)
     // El rol se decide automáticamente según el correo escrito
     // Guardamos la sesión y el rol detectado en el navegador
-    const roleType = iniciarSesion(email);
+    let roleType;
+    try { roleType = await registrarUsuario(nombre, email, password); }
+    catch (err) { setError(err instanceof Error ? err.message : 'No se pudo registrar'); return; }
 
     // Redirección automática según el rol detectado
     navigate(rutaInicioPorRol(roleType));
