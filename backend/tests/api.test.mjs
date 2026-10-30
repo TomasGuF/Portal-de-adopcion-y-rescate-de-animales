@@ -74,6 +74,13 @@ test('flujo completo: admin -> animal -> postulación -> estado -> archivado', {
   const next=await request(app).patch(`/api/applications/${appId}/status`).set('Authorization',`Bearer ${adminToken}`).send({status:'EN_REVISION'});
   assert.equal(next.status,200);
   assert.equal((await request(app).patch(`/api/applications/${appId}/status`).set('Authorization',`Bearer ${adminToken}`).send({status:'PENDIENTE'})).status,409);
+  const ownNotifications=await request(app).get('/api/notifications').set('Authorization',`Bearer ${userToken}`);
+  assert.equal(ownNotifications.status,200);
+  assert.ok(ownNotifications.body.data.some(item=>item.applicationId===appId && item.estado==='EN_REVISION'));
+  const otherNotifications=await request(app).get('/api/notifications').set('Authorization',`Bearer ${secondToken}`);
+  assert.equal(otherNotifications.status,200);
+  assert.ok(!otherNotifications.body.data.some(item=>item.applicationId===appId));
+  assert.equal((await request(app).get('/api/notifications')).status,401);
   const detail=await request(app).get(`/api/applications/${appId}`).set('Authorization',`Bearer ${userToken}`);
   assert.equal(detail.status,200);
   assert.equal(detail.body.data.estado,'EN_REVISION');
