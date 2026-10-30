@@ -1,0 +1,19 @@
+.detalle-animal{background:#fff;border:1px solid #e7ebe8;border-radius:16px;overflow:hidden;box-shadow:0 8px 30px rgba(20,50,30,.04);}
+.detalle-hero{display:grid;grid-template-columns:minmax(240px,45%) minmax(0,1fr);align-items:stretch;}
+.detalle-foto{display:block;width:100%;height:100%;min-height:340px;max-height:480px;object-fit:cover;}
+.detalle-cabecera{padding:clamp(20px,4vw,38px);display:flex;flex-direction:column;justify-content:center;}
+.detalle-cabecera h1{font-size:clamp(32px,4vw,44px);margin:12px 0 5px;color:#17211b;}
+.detalle-intro{color:#64716a;margin:0 0 20px;line-height:1.6;}
+.detalle-informacion{padding:8px clamp(20px,4vw,38px) 32px;}
+.detalle-informacion .animal-section{padding:22px 0;margin:0;}
+.detalle-informacion .animal-section-title{font-size:17px;}
+.detalle-informacion .animal-section-text{font-size:14px;}
+.detalle-acciones{max-width:620px;margin-top:10px;}
+.detalle-acciones .btn-postular{height:48px;margin:0 0 12px;}
+.detalle-acciones .action-buttons{display:flex;gap:12px;}
+.detalle-acciones .btn-secondary{flex:1;min-width:0;}
+.green-deck .detalle-acciones .btn-postular{--color:#fff !important;--background:#1db954 !important;}
+.green-deck .detalle-acciones .btn-postular::part(native){color:#fff !important;}
+.green-deck .detalle-acciones ion-button[fill="outline"]{--border-width:1px;--border-color:#d9e4db !important;--color:#34483c !important;--background:#f7faf8;}
+@media(max-width:650px){.detalle-hero{display:flex;flex-direction:column}.detalle-foto{height:260px;min-height:0}.detalle-acciones .action-buttons{flex-wrap:wrap;}.detalle-acciones .btn-secondary{flex-basis:100%;}}
+@media(prefers-reduced-motion:reduce){.detalle-animal.animal-card-enter{animation:none;}}
