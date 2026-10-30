@@ -6,7 +6,7 @@ const animals = [
 ];
 try {
   for (const a of animals) await db.query(`INSERT INTO animals(name,species,gender,age_text,size,location,shelter,description,image_url,status)
-    SELECT $1,$2,$3,$4,$5,$6,$7,$8,$9,'DISPONIBLE'
-    WHERE NOT EXISTS (SELECT 1 FROM animals WHERE name=$1 AND shelter=$7)`,a);
+    SELECT $1::text,$2,$3,$4,$5,$6,$7::text,$8,$9,'DISPONIBLE'
+    WHERE NOT EXISTS (SELECT 1 FROM animals WHERE name=$1::text AND shelter=$7::text)`,a);
   console.log('Datos de prueba cargados');
 } finally { await db.end(); }
