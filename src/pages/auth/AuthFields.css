@@ -1,0 +1,46 @@
+/* Campos de autenticación: una sola superficie, sin cajas internas ni autofill azul. */
+.green-deck .login-form .auth-field,
+.green-deck .register-form .auth-field { margin:0 0 16px; min-width:0; }
+.green-deck .auth-field > label {
+  display:block; margin-bottom:7px; font-size:12px; line-height:1.4;
+  font-weight:700; color:#34443a;
+}
+.green-deck .auth-field > input,
+.green-deck .auth-password-control {
+  box-sizing:border-box; width:100%; min-height:50px; border:1px solid #E5E7EB;
+  border-radius:10px; background:#F6F8F7; transition:border-color .2s, box-shadow .2s;
+}
+.green-deck .auth-field > input,
+.green-deck .auth-password-control input {
+  display:block; width:100%; min-width:0; height:50px;
+  padding:0 14px; font:500 14px/1.4 'DM Sans',sans-serif;
+  color:#17211b; background:transparent !important; border:0; outline:0; box-shadow:none;
+}
+.green-deck .auth-field > input { background:#F6F8F7 !important; border:1px solid #E5E7EB; }
+.green-deck .auth-password-control { display:flex; align-items:center; }
+.green-deck .auth-password-control input { flex:1; }
+.green-deck .auth-field > input:focus,
+.green-deck .auth-password-control:focus-within {
+  outline:none; border-color:#1DB954; box-shadow:0 0 0 3px rgba(29,185,84,.12);
+}
+.green-deck .auth-password-toggle {
+  appearance:none; border:0; border-radius:8px; background:transparent; color:#168c41;
+  min-height:42px; min-width:42px; margin-right:4px; display:grid; place-items:center;
+  cursor:pointer; flex:none; font-size:20px;
+}
+.green-deck .auth-password-toggle:hover {background:#eaf8ee;}
+.green-deck .auth-password-toggle:focus-visible {outline:2px solid #1DB954;outline-offset:0;}
+.green-deck .auth-field input::placeholder {color:#89958e;}
+.green-deck .auth-field input:-webkit-autofill,
+.green-deck .auth-field input:-webkit-autofill:hover,
+.green-deck .auth-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color:#17211b !important;
+  -webkit-box-shadow:0 0 0 1000px #F6F8F7 inset !important;
+  box-shadow:0 0 0 1000px #F6F8F7 inset !important;
+  caret-color:#17211b;
+  transition:background-color 9999s ease-out 0s;
+}
+.green-deck .auth-password-control input:-webkit-autofill,
+.green-deck .auth-password-control input:-webkit-autofill:focus {
+  -webkit-box-shadow:0 0 0 1000px #F6F8F7 inset !important;
+}
