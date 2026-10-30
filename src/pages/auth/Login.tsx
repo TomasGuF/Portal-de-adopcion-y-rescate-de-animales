@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { IonPage, IonContent, IonInput, IonButton, IonText, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonInputPasswordToggle, IonRouterLink, useIonRouter } from '@ionic/react';
+import { IonIcon } from '@ionic/react';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { IonPage, IonContent, IonButton, IonText, IonGrid, IonRow, IonCol, IonRouterLink, useIonRouter } from '@ionic/react';
 import { useLocation } from 'react-router-dom';
 import { iniciarSesion, rutaInicioPorRol } from '../../services/authService';
-import './Login.css'; 
+import './Login.css';
+import './AuthFields.css'; 
 
 const Login: React.FC = () => {
   const router = useIonRouter();
@@ -12,6 +15,7 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault(); 
@@ -88,27 +92,45 @@ const Login: React.FC = () => {
                     <p className="form-subtitle">Ingresa para continuar en PatitasGo.</p>
                   </IonText>
 
-                  <IonItem lines="none" className="input-item">
-                    <IonLabel position="stacked">Correo electrónico</IonLabel>
-                    <IonInput 
-                      type="email" 
-                      placeholder="tomas@ejemplo.cl" 
+                  <div className="auth-field">
+                    <label htmlFor="login-email">Correo electrónico</label>
+                    <input
+                      id="login-email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      inputMode="email"
+                      placeholder="nombre@correo.cl"
                       value={email}
-                      onIonInput={(e) => setEmail(e.detail.value!)}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
                     />
-                  </IonItem>
+                  </div>
 
-                  <IonItem lines="none" className="input-item">
-                    <IonLabel position="stacked">Contraseña</IonLabel>
-                    <IonInput 
-                      type="password" 
-                      placeholder="••••••••" 
-                      value={password}
-                      onIonInput={(e) => setPassword(e.detail.value!)}
-                    >
-                      <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
-                    </IonInput>
-                  </IonItem>
+                  <div className="auth-field">
+                    <label htmlFor="login-password">Contraseña</label>
+                    <div className="auth-password-control">
+                      <input
+                        id="login-password"
+                        name="password"
+                        type={mostrarPassword ? 'text' : 'password'}
+                        autoComplete="current-password"
+                        placeholder="Ingresa tu contraseña"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="auth-password-toggle"
+                        onClick={() => setMostrarPassword((anterior) => !anterior)}
+                        aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                        aria-pressed={mostrarPassword}
+                      >
+                        <IonIcon icon={mostrarPassword ? eyeOffOutline : eyeOutline} aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
 
                   <div className="forgot-password">
                     <IonRouterLink routerLink="/recuperar">¿Olvidaste tu contraseña?</IonRouterLink>
