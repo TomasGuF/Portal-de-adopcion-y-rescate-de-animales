@@ -21,9 +21,9 @@ export const MenuLateralUsuario: React.FC<MenuUsuarioProps> = ({ activo }) => {
   return (
     <>
       <div className="sidebar-header">
-        <div className="logo">
+        <button type="button" className="logo usuario-logo-boton" onClick={() => router.push('/catalogo')} aria-label="PatitasGo: ir a explorar animales">
           <span className="dot"></span> PatitasGo
-        </div>
+        </button>
         <span className="logo-subtitle">ADOPCIÓN Y RESCATE</span>
       </div>
 
