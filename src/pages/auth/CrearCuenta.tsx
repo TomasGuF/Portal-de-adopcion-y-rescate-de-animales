@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { IonPage, IonContent, IonInput, IonButton, IonText, IonItem, IonLabel, IonGrid, IonRow, IonCol, IonCheckbox, IonInputPasswordToggle } from '@ionic/react';
+import { IonIcon } from '@ionic/react';
+import { eyeOutline, eyeOffOutline } from 'ionicons/icons';
+import { IonPage, IonContent, IonButton, IonText, IonItem, IonGrid, IonRow, IonCol, IonCheckbox } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import { registrarUsuario, rutaInicioPorRol } from '../../services/authService';
-import './CrearCuenta.css'; 
+import './CrearCuenta.css';
+import './AuthFields.css'; 
 
 const REQUISITOS_PASSWORD = [
   { texto: '8 caracteres', cumple: (p: string) => p.length >= 8 },
@@ -22,6 +25,8 @@ const CrearCuenta: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [error, setError] = useState('');
+  const [mostrarPassword, setMostrarPassword] = useState(false);
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
 
   const passwordValida = REQUISITOS_PASSWORD.every((r) => r.cumple(password));
   const coinciden = confirmPassword !== '' && password === confirmPassword;
@@ -101,50 +106,32 @@ const CrearCuenta: React.FC = () => {
                     <p className="register-form-subtitle">Completa tus datos para comenzar.</p>
                   </IonText>
 
-                  <IonItem lines="none" className="register-input-item">
-                    <IonLabel position="stacked">Nombre completo</IonLabel>
-                    <IonInput 
-                      type="text" 
-                      placeholder="Tomás Guerra" 
-                      value={nombre}
-                      onIonInput={(e) => setNombre(e.detail.value!)}
-                    />
-                  </IonItem>
-
-                  <IonItem lines="none" className="register-input-item">
-                    <IonLabel position="stacked">Correo electrónico</IonLabel>
-                    <IonInput 
-                      type="email" 
-                      placeholder="tomas@ejemplo.cl" 
-                      value={email}
-                      onIonInput={(e) => setEmail(e.detail.value!)}
-                    />
-                  </IonItem>
-
-                  <IonItem lines="none" className="register-input-item">
-                    <IonLabel position="stacked">Contraseña</IonLabel>
-                    <IonInput 
-                      type="password" 
-                      placeholder="••••••••" 
-                      value={password}
-                      onIonInput={(e) => setPassword(e.detail.value!)}
-                    >
-                      <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
-                    </IonInput>
-                  </IonItem>
-
-                  <IonItem lines="none" className="register-input-item">
-                    <IonLabel position="stacked">Confirmar contraseña</IonLabel>
-                    <IonInput 
-                      type="password" 
-                      placeholder="••••••••" 
-                      value={confirmPassword}
-                      onIonInput={(e) => setConfirmPassword(e.detail.value!)}
-                    >
-                      <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
-                    </IonInput>
-                  </IonItem>
-
+                  <div className="auth-field">
+                    <label htmlFor="register-name">Nombre completo</label>
+                    
+                    <input id="register-name" name="register-name" type={'text'} autoComplete="name" placeholder="Nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
+                    
+                  </div>
+                  <div className="auth-field">
+                    <label htmlFor="register-email">Correo electrónico</label>
+                    
+                    <input id="register-email" name="register-email" type={'email'} autoComplete="email" placeholder="Correo electrónico" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    
+                  </div>
+                  <div className="auth-field">
+                    <label htmlFor="register-password">Contraseña</label>
+                    <div className="auth-password-control">
+                    <input id="register-password" name="register-password" type={mostrarPassword ? 'text' : 'password'} autoComplete="new-password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                    <button className="auth-password-toggle" type="button" onClick={() => setMostrarPassword(v => !v)} aria-label={mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={mostrarPassword}><IonIcon icon={mostrarPassword ? eyeOffOutline : eyeOutline} aria-hidden="true" /></button>
+                    </div>
+                  </div>
+                  <div className="auth-field">
+                    <label htmlFor="register-confirm">Confirmar contraseña</label>
+                    <div className="auth-password-control">
+                    <input id="register-confirm" name="register-confirm" type={mostrarConfirmacion ? 'text' : 'password'} autoComplete="new-password" placeholder="Confirmar contraseña" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                    <button className="auth-password-toggle" type="button" onClick={() => setMostrarConfirmacion(v => !v)} aria-label={mostrarConfirmacion ? 'Ocultar contraseña' : 'Mostrar contraseña'} aria-pressed={mostrarConfirmacion}><IonIcon icon={mostrarConfirmacion ? eyeOffOutline : eyeOutline} aria-hidden="true" /></button>
+                    </div>
+                  </div>
                   <div className="password-hints">
                     {REQUISITOS_PASSWORD.map((r) => {
                       const cumple = r.cumple(password);
