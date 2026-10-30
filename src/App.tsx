@@ -1,4 +1,5 @@
 import React from 'react';
+import './theme/green-deck.css';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import { Route, Navigate } from 'react-router-dom';
@@ -43,7 +44,7 @@ import { ProtectedRoute } from './routes/ProtectedRoute';
 setupIonicReact();
 
 const App: React.FC = () => (
-  <IonApp>
+  <IonApp className="green-deck">
     <IonReactRouter>
       <IonRouterOutlet>
         
