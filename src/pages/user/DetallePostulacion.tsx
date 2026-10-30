@@ -1,52 +1,43 @@
-import React from 'react';
-import { IonBadge, IonList, IonItem, IonLabel, IonText, IonButton } from '@ionic/react';
+import React, { useCallback, useState } from 'react';
+import { IonBadge, IonButton, IonItem, IonLabel, IonList, IonSpinner, IonText, useIonViewWillEnter } from '@ionic/react';
 import { useParams } from 'react-router-dom';
 import UsuarioLayout from '../../components/UsuarioLayout';
-import { obtenerPostulacion, ETIQUETA_ESTADO } from '../../services/postulacionesService';
+import { detallePostulacion } from '../../services/ep2Service';
+import { ETIQUETA_ESTADO } from '../../services/postulacionesService';
+import type { Postulacion } from '../../services/postulacionesService';
 
-const DetallePostulacion: React.FC = () => {
-  const { id } = useParams();
-  const postulacion = obtenerPostulacion(Number(id));
-
-  if (!postulacion) {
-    return (
-      <UsuarioLayout titulo="Postulación" volverA="/usuario/postulaciones">
-        <IonText><p>No encontramos esta postulación.</p></IonText>
-      </UsuarioLayout>
-    );
-  }
-
-  const estado = ETIQUETA_ESTADO[postulacion.estado];
-
-  return (
-    <UsuarioLayout titulo={`Postulación por ${postulacion.animal}`} volverA="/usuario/postulaciones">
-      <h1>Postulación por {postulacion.animal}</h1>
-      <IonBadge color={estado.color}>{estado.texto}</IonBadge>
-      <IonText color="medium"><p>{postulacion.refugio} • Enviada el {postulacion.fecha}</p></IonText>
-
-      <h3>Seguimiento</h3>
-      <IonList inset>
-        {postulacion.historial.map((h, index) => (
-          <IonItem key={index}>
-            <IonLabel>
-              <h3>{h.detalle}</h3>
-              <p>{h.fecha}</p>
-            </IonLabel>
-          </IonItem>
-        ))}
-      </IonList>
-
-      {postulacion.estado === 'ACEPTADA_EN_PROCESO' && (
-        <IonText color="success">
-          <p>El refugio propuso una entrevista. La coordinación de la cita se habilitará con el backend (EP2).</p>
-        </IonText>
-      )}
-
-      <IonButton expand="block" fill="outline" color="dark" routerLink={`/animales/${postulacion.animalId}`}>
-        Ver ficha de {postulacion.animal}
-      </IonButton>
-    </UsuarioLayout>
-  );
+const fechaLegible = (fecha: string) => {
+  const d = new Date(fecha);
+  return Number.isNaN(d.getTime()) ? fecha : d.toLocaleString('es-CL', {dateStyle:'medium',timeStyle:'short'});
 };
 
+const DetallePostulacion: React.FC = () => {
+  const { id } = useParams<{id:string}>();
+  const [postulacion, setPostulacion] = useState<Postulacion | null>(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
+  const cargar = useCallback(async () => {
+    setCargando(true); setError(''); setPostulacion(null);
+    try { setPostulacion(await detallePostulacion(Number(id))); }
+    catch(e){setError(e instanceof Error ? e.message : 'No se pudo consultar la postulación');}
+    finally {setCargando(false);}
+  },[id]);
+  useIonViewWillEnter(() => { void cargar(); });
+  return <UsuarioLayout titulo="Detalle de postulación" volverA="/usuario/postulaciones">
+    {cargando ? <div className="usuario-cargando"><IonSpinner name="crescent" /> Cargando solicitud...</div>
+    : error || !postulacion ? <section className="usuario-tarjeta"><p role="alert" className="usuario-error">{error || 'Solicitud no encontrada'}</p><IonButton onClick={() => void cargar()}>Reintentar</IonButton></section>
+    : <><h1>Postulación por {postulacion.animal}</h1>
+        <IonBadge color={(ETIQUETA_ESTADO[postulacion.estado] ?? {color:'medium'}).color}>
+          {(ETIQUETA_ESTADO[postulacion.estado] ?? {texto:postulacion.estado}).texto}
+        </IonBadge>
+        <IonText color="medium"><p>{postulacion.refugio} · Enviada el {fechaLegible(postulacion.fecha)}</p></IonText>
+        <section className="usuario-tarjeta"><h2>Tu motivación</h2><p style={{whiteSpace:'pre-wrap'}}>{postulacion.motivacion}</p></section>
+        <h2>Seguimiento</h2>
+        <IonList inset>{postulacion.historial.map((evento,index)=>
+          <IonItem key={index}><IonLabel><h3>{evento.detalle}</h3><p>{fechaLegible(evento.fecha)}</p></IonLabel></IonItem>
+        )}</IonList>
+        <IonButton expand="block" fill="outline" color="dark" routerLink={`/animales/${postulacion.animalId}`}>Ver ficha de {postulacion.animal}</IonButton>
+      </>}
+    </UsuarioLayout>;
+};
 export default DetallePostulacion;
