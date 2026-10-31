@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { randomUUID } from 'node:crypto';
 import { query } from './db.mjs';
+import { createApplicationRouter } from './modules/applications/application.router.mjs';
+import { ApplicationError } from './modules/applications/application.service.mjs';
 import { validEmail, validName, validPassword, validateAnimal, idValue, enums } from './validation.mjs';
 
 if (!process.env.JWT_SECRET || process.env.JWT_SECRET.startsWith('replace-with') || process.env.JWT_SECRET.length < 32) throw new Error('JWT_SECRET debe contener al menos 32 caracteres');
@@ -117,67 +119,11 @@ app.delete('/api/animals/:id',authenticate,role('admin'),asyncHandler(async(req,
   return rowCount?res.status(204).end():fail(res,404,'NOT_FOUND','Animal no encontrado');
 }));
 
-app.post('/api/applications',authenticate,role('user'),asyncHandler(async(req,res)=>{
-  const id=idValue(req.body?.animalId), motivation=req.body?.motivation;
-  if(!id||typeof motivation!=='string'||motivation.trim().length<10||motivation.length>3000)return fail(res,400,'VALIDATION_ERROR','Animal y motivación de al menos 10 caracteres requeridos');
-  const client=await (await import('./db.mjs')).db.connect();
-  try {
-    await client.query('BEGIN');
-    const available=await client.query("SELECT id FROM animals WHERE id=$1 AND status='DISPONIBLE' FOR SHARE",[id]);
-    if(!available.rowCount){await client.query('ROLLBACK');return fail(res,404,'NOT_FOUND','Animal no disponible');}
-    const {rows}=await client.query(`INSERT INTO applications(animal_id,user_id,motivation) VALUES($1,$2,$3) RETURNING id,animal_id,status`,[id,req.user.id,motivation.trim()]);
-    await client.query('INSERT INTO application_events(application_id,actor_id,to_status) VALUES($1,$2,$3)',[rows[0].id,req.user.id,'PENDIENTE']);
-    await client.query('COMMIT');send(res,201,{id:Number(rows[0].id),animalId:id,estado:'PENDIENTE'});
-  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
-}));
-const APP_SELECT=`SELECT a.*, an.name AS animal,an.shelter AS refugio,u.full_name AS postulante
-  FROM applications a JOIN animals an ON a.animal_id=an.id JOIN users u ON a.user_id=u.id`;
-app.get('/api/applications',authenticate,asyncHandler(async(req,res)=>{
-  const isAdmin=req.user.role==='admin';
-  const {rows}=await query(`${APP_SELECT} ${isAdmin?'':'WHERE a.user_id=$1'} ORDER BY a.created_at DESC LIMIT 200`,isAdmin?[]:[req.user.id]);
-  send(res,200,rows.map(appData));
-}));
-// Eventos auténticos vinculados únicamente a postulaciones del usuario autenticado.
-// La tabla application_events ya forma parte del esquema; no requiere migraciones.
-app.get('/api/notifications',authenticate,role('user'),asyncHandler(async(req,res)=>{
-  const {rows}=await query(`SELECT ev.id,ev.application_id,ev.to_status,ev.reason,ev.created_at,
-      an.name AS animal,an.shelter AS shelter
-    FROM application_events ev
-    JOIN applications ap ON ap.id=ev.application_id
-    JOIN animals an ON an.id=ap.animal_id
-    WHERE ap.user_id=$1
-    ORDER BY ev.created_at DESC,ev.id DESC LIMIT 100`,[req.user.id]);
-  send(res,200,rows.map(row=>({
-    id:Number(row.id),applicationId:Number(row.application_id),estado:row.to_status,
-    animal:row.animal,refugio:row.shelter,fecha:row.created_at,
-    motivo:row.reason || ''
-  })));
-}));
-app.get('/api/applications/:id',authenticate,asyncHandler(async(req,res)=>{
-  const id=idValue(req.params.id);if(!id)return fail(res,400,'VALIDATION_ERROR','ID inválido');
-  const {rows}=await query(`${APP_SELECT} WHERE a.id=$1 ${req.user.role==='admin'?'':'AND a.user_id=$2'}`,[id,...(req.user.role==='admin'?[]:[req.user.id])]);
-  if(!rows.length)return fail(res,404,'NOT_FOUND','Postulación no encontrada');
-  const {rows:events}=await query('SELECT to_status,reason,created_at FROM application_events WHERE application_id=$1 ORDER BY created_at',[id]);
-  const result=appData(rows[0]);result.historial=events.map(e=>({fecha:e.created_at,detalle:`Estado: ${e.to_status}${e.reason?' - '+e.reason:''}`}));send(res,200,result);
-}));
-app.patch('/api/applications/:id/status',authenticate,role('admin'),asyncHandler(async(req,res)=>{
-  const id=idValue(req.params.id), nextStatus=req.body?.status, reason=req.body?.reason||'';
-  if(!id||!enums.applicationStatus.includes(nextStatus)||typeof reason!=='string'||reason.length>1000)return fail(res,400,'VALIDATION_ERROR','Estado o motivo inválido');
-  const transitions={PENDIENTE:['EN_REVISION','RECHAZADA'],EN_REVISION:['APROBADA','RECHAZADA'],APROBADA:[],RECHAZADA:[]};
-  const client=await (await import('./db.mjs')).db.connect();
-  try {
-    await client.query('BEGIN');
-    const {rows}=await client.query('SELECT status FROM applications WHERE id=$1 FOR UPDATE',[id]);
-    if(!rows.length){await client.query('ROLLBACK');return fail(res,404,'NOT_FOUND','Postulación no encontrada');}
-    if(!transitions[rows[0].status]?.includes(nextStatus)){await client.query('ROLLBACK');return fail(res,409,'INVALID_TRANSITION','Transición de estado no permitida');}
-    await client.query('UPDATE applications SET status=$1,review_reason=$2,reviewed_by=$3,updated_at=now() WHERE id=$4',[nextStatus,reason,req.user.id,id]);
-    await client.query('INSERT INTO application_events(application_id,actor_id,from_status,to_status,reason) VALUES($1,$2,$3,$4,$5)',[id,req.user.id,rows[0].status,nextStatus,reason]);
-    await client.query('COMMIT');send(res,200,{id,estado:nextStatus});
-  }catch(error){await client.query('ROLLBACK');throw error;}finally{client.release();}
-}));
+app.use('/api',createApplicationRouter({authenticate,role,asyncHandler,send,fail}));
 
 app.use((req,res)=>fail(res,404,'NOT_FOUND','Ruta no encontrada'));
 app.use((error,_req,res,_next)=>{
+  if(error instanceof ApplicationError)return fail(res,error.status,error.code,error.message);
   if(error?.type==='entity.parse.failed')return fail(res,400,'INVALID_JSON','JSON inválido');
   if(error?.code==='23505')return fail(res,409,'ALREADY_EXISTS','Ya existe ese registro');
   if(['23503','23514','23502','22P02'].includes(error?.code))return fail(res,400,'DATA_CONSTRAINT','Datos inválidos o referencia inexistente');
