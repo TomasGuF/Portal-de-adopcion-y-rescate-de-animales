@@ -1,0 +1,50 @@
+/* Único menú lateral, persistente al navegar entre rutas de usuario. */
+.patitas-stable-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1100;
+  width: 240px;
+  padding: 30px 18px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #fff;
+  border-right: 1px solid #E5E7EB;
+}
+.patitas-stable-sidebar .nav-menu { flex: 1; }
+.patitas-stable-mobile-nav { display: none; }
+
+/* El contenido ya no incluye el antiguo IonCol lateral:
+   se reserva el ancho del menú una sola vez, sin superposición. */
+.green-deck .explore-main,
+.green-deck .usuario-principal {
+  box-sizing: border-box;
+  margin-left: 240px;
+  width: calc(100% - 240px);
+  min-width: 0;
+  min-height: 100%;
+  padding: 40px clamp(24px, 3vw, 48px);
+  background: #fff;
+}
+.green-deck .explore-main { overflow: visible; }
+
+@media (max-width: 992px) {
+  .patitas-stable-sidebar { display: none; }
+  .patitas-stable-mobile-nav {
+    display: block;
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .patitas-stable-mobile-nav .barra-inferior-footer { display: block; }
+  .green-deck .explore-main,
+  .green-deck .usuario-principal {
+    margin-left: 0;
+    width: 100%;
+    padding: 24px 18px 98px;
+  }
+}

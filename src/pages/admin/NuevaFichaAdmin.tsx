@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { IonInput, IonSelect, IonSelectOption, IonTextarea, IonButton, IonText, IonToast } from '@ionic/react';
 import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
+import { crearAnimal } from '../../services/ep2Service';
 
 interface FichaForm {
   nombre: string;
@@ -20,16 +21,18 @@ const NuevaFichaAdmin: React.FC = () => {
   const [form, setForm] = useState<FichaForm>(FORM_INICIAL);
   const [intentado, setIntentado] = useState(false);
   const [guardado, setGuardado] = useState(false);
+  const [error,setError] = useState('');
 
   const actualizar = (campo: keyof FichaForm, valor: string) => setForm({ ...form, [campo]: valor });
   const invalido = (campo: keyof FichaForm) => intentado && form[campo].trim() === '';
   const claseCampo = (campo: keyof FichaForm) => `ion-margin-bottom ${invalido(campo) ? 'ion-invalid ion-touched' : ''}`;
 
-  const handleGuardar = () => {
+  const handleGuardar = async () => {
     setIntentado(true);
     const obligatorios: (keyof FichaForm)[] = ['nombre', 'especie', 'sexo', 'edad', 'tamano', 'comuna'];
     if (obligatorios.some((c) => form[c].trim() === '')) return;
-    setGuardado(true);
+    try { await crearAnimal({name:form.nombre,species:form.especie,gender:form.sexo,age:form.edad,size:form.tamano,location:form.comuna,description:form.descripcion,status:'BORRADOR'});setGuardado(true); }
+    catch(e){setError(e instanceof Error ? e.message : 'No se pudo crear el animal');}
   };
 
   return (
@@ -66,6 +69,7 @@ const NuevaFichaAdmin: React.FC = () => {
         <IonText color="danger"><p>Completa los campos obligatorios marcados con *.</p></IonText>
       )}
 
+      {error && <IonText color="danger"><p>{error}</p></IonText>}
       <IonButton expand="block" color="success" onClick={handleGuardar}>Guardar borrador</IonButton>
       <IonButton expand="block" fill="outline" color="dark" routerLink="/admin/animales">Cancelar</IonButton>
 

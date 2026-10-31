@@ -1,0 +1,47 @@
+/* Las vistas de perfil, alertas, postulaciones y detalle reutilizan el shell de Explorar. */
+.usuario-cuerpo { --background: #f4f5f7; }
+.usuario-estructura {
+  display: grid;
+  grid-template-columns: minmax(240px, 21%) minmax(0, 1fr);
+  min-height: 100%;
+}
+.usuario-lateral.sidebar {
+  min-height: 100%;
+  padding: 30px 20px;
+}
+.usuario-principal {
+  min-width: 0;
+  padding: 40px clamp(20px, 3vw, 48px);
+}
+.usuario-interior {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.usuario-interior > h1 {
+  font-size: 1.85rem;
+  font-weight: 750;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+}
+.usuario-interior ion-list[inset] { margin-inline: 0; border-radius: 16px; overflow: hidden; }
+.usuario-interior ion-item { --min-height: 64px; }
+.usuario-interior ion-button { --border-radius: 10px; }
+.usuario-titulo-accesible { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.usuario-volver { margin-bottom: 18px; }
+.usuario-tarjeta {
+  border: 1px solid #e7eae7;
+  border-radius: 18px;
+  background: #fff;
+  padding: 20px;
+  margin-top: 18px;
+}
+.usuario-vacio { text-align: center; padding: 28px 16px; }
+.usuario-vacio h2 { font-size: 1.3rem; }
+.usuario-cargando { color: #646b73; padding: 24px; }
+.usuario-error { color: #b42318; margin: 18px 0; }
+@media (max-width: 992px) {
+  .usuario-estructura { display: block; }
+  .usuario-lateral.sidebar { display: none; }
+  .usuario-principal { padding: 24px 18px; }
+}

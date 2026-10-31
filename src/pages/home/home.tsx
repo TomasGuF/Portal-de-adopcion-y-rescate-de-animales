@@ -5,6 +5,8 @@ import {
   useIonRouter,
 } from '@ionic/react';
 import './home.css';
+import { IonIcon } from '@ionic/react';
+import { pawOutline, arrowForwardOutline } from 'ionicons/icons';
 
 const Home: React.FC = () => {
   const router = useIonRouter();
@@ -14,10 +16,10 @@ const Home: React.FC = () => {
       {/* Barra de navegación superior integrada */}
       <header className="pm-navbar">
         <div className="pm-nav-left">
-          <div className="pm-logo" onClick={() => router.push('/')}>
-            <span className="pm-logo-icon">🐾</span>
+          <button type="button" className="pm-logo" onClick={() => router.push('/catalogo')} aria-label="PatitasGo: explorar animales">
+            <IonIcon icon={pawOutline} className="pm-logo-icon" />
             <span className="pm-logo-text">PatitasGo</span>
-          </div>
+          </button>
 
           <nav className="pm-nav-links">
             <span 
@@ -76,7 +78,7 @@ const Home: React.FC = () => {
               className="pm-btn-cta"
               onClick={() => router.push('/catalogo')}
             >
-              Adopta a tu mejor amigo →
+              Adopta a tu mejor amigo <IonIcon icon={arrowForwardOutline} aria-hidden="true" />
             </button>
           </div>
         </div>

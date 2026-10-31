@@ -70,9 +70,20 @@ export const obtenerAnimales = () => ANIMALES;
 
 export const obtenerAnimal = (id: number) => ANIMALES.find((a) => a.id === id);
 
-const FAVORITOS_KEY = 'favoritos';
-
-export const obtenerFavoritos = (): number[] => JSON.parse(localStorage.getItem(FAVORITOS_KEY) ?? '[]');
+// Favoritos persistidos por cuenta, evitando mezclar usuarios en el mismo navegador.
+const favoritosKey = () => {
+  try {
+    const raw = sessionStorage.getItem('patitasgo.user');
+    const user = raw ? JSON.parse(raw) as {id?:number} : null;
+    return `patitasgo.favoritos.${user?.id ?? 'invitado'}`;
+  } catch { return 'patitasgo.favoritos.invitado'; }
+};
+export const obtenerFavoritos = (): number[] => {
+  try {
+    const values:unknown = JSON.parse(localStorage.getItem(favoritosKey()) ?? '[]');
+    return Array.isArray(values) ? values.filter((n): n is number => Number.isSafeInteger(n) && n > 0) : [];
+  } catch { return []; }
+};
 
 export const esFavorito = (id: number) => obtenerFavoritos().includes(id);
 
@@ -80,6 +91,7 @@ export const alternarFavorito = (id: number): boolean => {
   const favoritos = obtenerFavoritos();
   const agregado = !favoritos.includes(id);
   const nuevos = agregado ? [...favoritos, id] : favoritos.filter((f) => f !== id);
-  localStorage.setItem(FAVORITOS_KEY, JSON.stringify(nuevos));
+  localStorage.setItem(favoritosKey(), JSON.stringify(nuevos));
+  window.dispatchEvent(new Event('patitasgo:favoritos-changed'));
   return agregado;
 };
