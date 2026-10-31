@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { IonButton, IonIcon, IonSpinner, useIonRouter, useIonViewWillEnter } from '@ionic/react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { IonButton, IonIcon, IonSpinner } from '@ionic/react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { documentTextOutline, pawOutline, arrowForwardOutline, calendarOutline, alertCircleOutline } from 'ionicons/icons';
 import UsuarioLayout from '../../components/UsuarioLayout';
 import { listarPostulaciones } from '../../services/ep2Service';
@@ -9,37 +10,45 @@ import './UserDashboard.css';
 
 const fechaLegible = (fecha?: string) => {
   if (!fecha) return 'Fecha no disponible';
-  const d = new Date(fecha);
-  return Number.isNaN(d.getTime()) ? 'Fecha no disponible' : d.toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' });
+  const valor = new Date(fecha);
+  return Number.isNaN(valor.getTime())
+    ? 'Fecha no disponible'
+    : valor.toLocaleDateString('es-CL', { day: 'numeric', month: 'short', year: 'numeric' });
 };
 
 const MisPostulaciones: React.FC = () => {
-  const router = useIonRouter();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [postulaciones, setPostulaciones] = useState<Postulacion[]>([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
+  const ultimaSolicitud = useRef(0);
 
   const cargar = useCallback(async () => {
+    // Ignoramos respuestas antiguas cuando Ionic navega rápidamente entre pantallas.
+    const solicitud = ++ultimaSolicitud.current;
     setCargando(true);
     setError('');
     try {
-      const datos = await listarPostulaciones();
-      if (!Array.isArray(datos)) {
-        throw new Error('La API devolvió un formato de postulaciones inesperado.');
-      }
-      setPostulaciones(datos);
-    } catch (e) {
+      const resultado = await listarPostulaciones();
+      if (solicitud !== ultimaSolicitud.current) return;
+      if (!Array.isArray(resultado)) throw new Error('Formato inesperado en la respuesta del servidor.');
+      setPostulaciones(resultado);
+    } catch (err) {
+      if (solicitud !== ultimaSolicitud.current) return;
       setPostulaciones([]);
-      setError(e instanceof Error ? e.message : 'No se pudieron cargar las postulaciones');
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las postulaciones.');
     } finally {
-      setCargando(false);
+      if (solicitud === ultimaSolicitud.current) setCargando(false);
     }
   }, []);
 
-  // Cargar al montar, incluso si Ionic no emite ionViewWillEnter en esta ruta.
-  useEffect(() => { void cargar(); }, [cargar]);
-  // Actualizar cuando se regresa desde el detalle o se vuelve a esta pestaña.
-  useIonViewWillEnter(() => { void cargar(); });
+  // Una sola estrategia de carga: al ingresar o regresar a la ruta.
+  // Evitamos combinar useEffect con el evento ionViewWillEnter (solicitudes duplicadas).
+  useEffect(() => {
+    if (location.pathname === '/usuario/postulaciones') void cargar();
+    return () => { ultimaSolicitud.current += 1; };
+  }, [location.pathname, location.key, cargar]);
 
   return (
     <UsuarioLayout titulo="Mis postulaciones">
@@ -71,16 +80,16 @@ const MisPostulaciones: React.FC = () => {
           <IonButton color="success" routerLink="/catalogo">Conocer animales</IonButton>
         </div>
       ) : (
-        <div className="panel-list" aria-label="Listado de mis postulaciones">
+        <div className="panel-list" aria-label="Mis postulaciones">
           {postulaciones.map((p) => {
-            const estado = ETIQUETA_ESTADO[p.estado] ?? { texto: p.estado || 'Pendiente', color: 'medium' };
+            const etiqueta = ETIQUETA_ESTADO[p.estado] ?? { texto: p.estado || 'Sin estado', color: 'medium' };
             return (
               <button
                 type="button"
                 key={p.id}
                 className="panel-row panel-row-button"
-                onClick={() => router.push(`/usuario/postulaciones/${p.id}`)}
-                aria-label={`Ver postulación por ${p.animal || 'animal'}: ${estado.texto}`}
+                onClick={() => navigate(`/usuario/postulaciones/${p.id}`)}
+                aria-label={`Ver postulación por ${p.animal || 'animal'}: ${etiqueta.texto}`}
               >
                 <span className="panel-icon"><IonIcon icon={pawOutline} /></span>
                 <span className="panel-row-content">
@@ -88,7 +97,7 @@ const MisPostulaciones: React.FC = () => {
                   <span className="panel-row-description">{p.refugio || 'Refugio no disponible'}</span>
                   <span className="panel-row-date"><IonIcon icon={calendarOutline} />{fechaLegible(p.fecha)}</span>
                 </span>
-                <span className={`panel-status status-${(p.estado || 'PENDIENTE').toLowerCase()}`}>{estado.texto}</span>
+                <span className={`panel-status status-${(p.estado || 'PENDIENTE').toLowerCase()}`}>{etiqueta.texto}</span>
                 <IonIcon icon={arrowForwardOutline} className="panel-chevron" />
               </button>
             );
